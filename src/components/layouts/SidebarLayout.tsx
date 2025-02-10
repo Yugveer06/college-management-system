@@ -2,21 +2,20 @@ import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import { UserRole } from "@/types/auth";
 import {
-	Bandage,
-	Briefcase,
+	BookCopy,
+	BookUser,
+	CalendarDays,
 	ChevronUp,
-	DollarSign,
 	LayoutGrid,
+	ListCheck,
 	LoaderCircle,
 	Menu,
-	Pill,
-	Shield,
-	Tickets,
+	University,
 	User2,
-	UserPlus,
 	Users,
 } from "lucide-react";
 import { motion as m } from "motion/react";
+import { JSX } from "react";
 import { Link, Outlet, useLocation } from "react-router";
 import {
 	Collapsible,
@@ -47,20 +46,10 @@ import {
 	SidebarProvider,
 	useSidebar,
 } from "../ui/sidebar";
-import { JSX } from "react";
 
 function SidebarLayout() {
-	const { user, logout } = useAuth();
+	const { profile, logout } = useAuth();
 	const location = useLocation();
-
-	const hasPermission = (allowedRoles?: UserRole[]) => {
-		if (!allowedRoles || allowedRoles.length === 0) return true;
-		return user && allowedRoles.includes(user.role_id);
-	};
-
-	const filteredGroups = groups.filter(group =>
-		hasPermission(group.allowedRoles)
-	);
 
 	return (
 		<>
@@ -78,21 +67,15 @@ function SidebarLayout() {
 										alt='PMS Logo'
 										className='w-8'
 									/>
-									<h1 className='text-lg font-bold text-indigo-800'>
-										PMS
+									<h1 className='text-lg font-bold text-emerald-800'>
+										CMS
 									</h1>
 								</Link>
 							</SidebarMenuItem>
 						</SidebarMenu>
 					</SidebarHeader>
 					<SidebarContent>
-						{filteredGroups.map(group => {
-							const filteredItems = group.items.filter(item =>
-								hasPermission(item.allowedRoles)
-							);
-
-							if (filteredItems.length === 0) return null;
-
+						{groups.map(group => {
 							return (
 								<SidebarGroup key={group.id}>
 									<SidebarGroupLabel>
@@ -100,19 +83,11 @@ function SidebarLayout() {
 									</SidebarGroupLabel>
 									<SidebarGroupContent>
 										<SidebarMenu>
-											{filteredItems.map(item => {
-												const filteredSubitems =
-													item.subitems?.filter(
-														subitem =>
-															hasPermission(
-																subitem.allowedRoles
-															)
-													);
-
+											{group.items.map(item => {
 												if (
 													item.subitems &&
-													(!filteredSubitems ||
-														filteredSubitems.length ===
+													(!item.subitems ||
+														item.subitems.length ===
 															0)
 												) {
 													return null;
@@ -133,7 +108,7 @@ function SidebarLayout() {
 																	location.pathname.includes(
 																		item.id
 																	) &&
-																		"bg-indigo-100/20 border border-indigo-50"
+																		"bg-emerald-100/20 border border-emerald-50"
 																)}
 															>
 																<CollapsibleTrigger
@@ -164,12 +139,12 @@ function SidebarLayout() {
 																) && (
 																	<m.div
 																		layoutId='activeItemIndicator'
-																		className='rounded-full absolute top-0 -left-1.5 h-full w-0.5 bg-indigo-500'
+																		className='rounded-full absolute top-0 -left-1.5 h-full w-0.5 bg-emerald-500'
 																	/>
 																)}
 																<CollapsibleContent className='space-y-1 flex flex-col'>
 																	<SidebarMenuSub>
-																		{filteredSubitems!.map(
+																		{item.subitems!.map(
 																			subItem => (
 																				<SidebarMenuSubItem
 																					className='relative'
@@ -186,11 +161,11 @@ function SidebarLayout() {
 																								"active:scale-95 transition-all p-0 font-normal w-full justify-start",
 																								location.pathname ===
 																									subItem.href &&
-																									"bg-indigo-100/40 border border-indigo-100",
+																									"bg-emerald-100/40 border border-emerald-100",
 																								location.pathname.includes(
 																									item.id
 																								) &&
-																									"hover:bg-indigo-100"
+																									"hover:bg-emerald-100"
 																							)}
 																						>
 																							<Link
@@ -225,11 +200,12 @@ function SidebarLayout() {
 																								opacity: 0,
 																							}}
 																							layoutId={`activeSubItem${
-																								filteredSubitems?.[0]
+																								item
+																									.subitems?.[0]
 																									?.id ||
 																								""
 																							}Indicator`}
-																							className='rounded-full absolute top-0 -left-3 h-full w-0.5 bg-indigo-500'
+																							className='rounded-full absolute top-0 -left-3 h-full w-0.5 bg-emerald-500'
 																						/>
 																					)}
 																				</SidebarMenuSubItem>
@@ -249,7 +225,7 @@ function SidebarLayout() {
 																			"active:scale-95 transition-all p-0 font-normal w-full justify-start",
 																			location.pathname ===
 																				item.href &&
-																				"bg-indigo-100/40 border border-indigo-100 hover:bg-indigo-100"
+																				"bg-emerald-100/40 border border-emerald-100 hover:bg-emerald-100"
 																		)}
 																	>
 																		<Link
@@ -275,7 +251,7 @@ function SidebarLayout() {
 																		item.href && (
 																		<m.div
 																			layoutId='activeItemIndicator'
-																			className='rounded-full absolute top-0 -left-1.5 h-full w-0.5 bg-indigo-500'
+																			className='rounded-full absolute top-0 -left-1.5 h-full w-0.5 bg-emerald-500'
 																		/>
 																	)}
 																</>
@@ -301,14 +277,12 @@ function SidebarLayout() {
 													location.pathname.startsWith(
 														"/dashboard/profile"
 													) &&
-														"bg-indigo-100/40 border border-indigo-100 hover:bg-indigo-100"
+														"bg-emerald-100/40 border border-emerald-100 hover:bg-emerald-100"
 												)}
 											>
 												<User2 />
-												{user ? (
-													user?.f_name +
-													" " +
-													user?.l_name
+												{profile ? (
+													profile?.username
 												) : (
 													<LoaderCircle className='animate-spin' />
 												)}
@@ -317,7 +291,7 @@ function SidebarLayout() {
 											{location.pathname.startsWith(
 												"/dashboard/profile"
 											) && (
-												<div className='rounded-full absolute top-0 -left-1.5 h-full w-0.5 bg-indigo-500' />
+												<div className='rounded-full absolute top-0 -left-1.5 h-full w-0.5 bg-emerald-500' />
 											)}
 										</div>
 									</DropdownMenuTrigger>
@@ -411,92 +385,32 @@ const groups: Group[] = [
 		],
 	},
 	{
-		id: "users",
-		name: "Users",
+		id: "details",
+		name: "Details",
 		items: [
 			{
-				id: "admin",
-				title: "Admin",
-				icon: <Shield />,
-				subitems: [
-					{
-						id: "view_admins",
-						title: "View Admins",
-						href: "/dashboard/admin/view",
-						icon: <Users />,
-					},
-					{
-						id: "add_admins",
-						title: "Add Admin",
-						href: "/dashboard/admin/add",
-						icon: <UserPlus />,
-						allowedRoles: [UserRole.ADMIN],
-					},
-				],
+				id: "students",
+				title: "Students",
+				icon: <BookUser />,
+				href: "/dashboard/students",
 			},
 			{
-				id: "manager",
-				title: "Managers",
-				icon: <Briefcase />,
-				subitems: [
-					{
-						id: "view_managers",
-						title: "View Managers",
-						href: "/dashboard/manager/view",
-						icon: <Users />,
-					},
-					{
-						id: "add_managers",
-						title: "Add Manager",
-						href: "/dashboard/manager/add",
-						icon: <UserPlus />,
-						allowedRoles: [UserRole.ADMIN],
-					},
-				],
+				id: "faculties",
+				title: "Faculties",
+				icon: <Users />,
+				href: "/dashboard/faculties",
 			},
 			{
-				id: "pharmacist",
-				title: "Pharmacists",
-				icon: <Bandage />,
-				subitems: [
-					{
-						id: "view_pharmacists",
-						title: "View Pharmacists",
-						href: "/dashboard/pharmacist/view",
-						icon: <Users />,
-					},
-					{
-						id: "add_pharmacists",
-						title: "Add Pharmacist",
-						href: "/dashboard/pharmacist/add",
-						icon: <UserPlus />,
-						allowedRoles: [UserRole.ADMIN, UserRole.MANAGER],
-					},
-				],
+				id: "departments",
+				title: "Departments",
+				icon: <University />,
+				href: "/dashboard/departments",
 			},
 			{
-				id: "salesman",
-				title: "Salesmen",
-				icon: <DollarSign />,
-				subitems: [
-					{
-						id: "view_salesmen",
-						title: "View Salesmen",
-						href: "/dashboard/salesman/view",
-						icon: <Users />,
-					},
-					{
-						id: "add_salesmen",
-						title: "Add Salesman",
-						href: "/dashboard/salesman/add",
-						icon: <UserPlus />,
-						allowedRoles: [
-							UserRole.ADMIN,
-							UserRole.MANAGER,
-							UserRole.PHARMACIST,
-						],
-					},
-				],
+				id: "courses",
+				title: "Courses",
+				icon: <BookCopy />,
+				href: "/dashboard/courses",
 			},
 		],
 	},
@@ -505,10 +419,10 @@ const groups: Group[] = [
 		name: "Other",
 		items: [
 			{
-				id: "drugs",
-				title: "Drugs",
-				href: "/dashboard/drugs",
-				icon: <Pill />,
+				id: "attendance",
+				title: "Attendance",
+				href: "/dashboard/attendance",
+				icon: <ListCheck />,
 				allowedRoles: [
 					UserRole.ADMIN,
 					UserRole.MANAGER,
@@ -516,15 +430,14 @@ const groups: Group[] = [
 				],
 			},
 			{
-				id: "orders",
-				title: "Orders",
-				href: "/dashboard/orders",
-				icon: <Tickets />,
+				id: "timeTable",
+				title: "Time Table",
+				href: "/dashboard/time-table",
+				icon: <CalendarDays />,
 				allowedRoles: [
 					UserRole.ADMIN,
 					UserRole.MANAGER,
 					UserRole.PHARMACIST,
-					UserRole.SALESMAN,
 				],
 			},
 		],

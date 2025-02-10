@@ -1,61 +1,83 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from "react";
-import { AuthState, User } from "@/types/auth";
+import {
+	createContext,
+	useContext,
+	useState,
+	ReactNode,
+	useEffect,
+} from "react";
+import { User } from "@supabase/supabase-js";
+import { supabase } from "@/hooks/useSupabase";
 
 interface AuthContextType {
-	isAuthenticated: boolean | null;
+	isAuthenticated: boolean;
 	user: User | null;
-	checkAuth: () => Promise<{ isAuthenticated: boolean | null; user: User | null }>;
-	logout: () => void;
+	profile: any | null;
+	checkAuth: () => Promise<{ isAuthenticated: boolean; user: User | null }>;
+	logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-	const [authState, setAuthState] = useState<AuthState>({
-		user: null,
-		token: null,
-		isAuthenticated: null,
-	});
+	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+	const [user, setUser] = useState<User | null>(null);
+	const [profile, setProfile] = useState<any | null>(null);
 
-	const checkAuth = async () => {
-		try {
-			const response = await fetch("/api/auth/check", {
-				credentials: "include",
-			});
-			const data = await response.json();
+	const fetchProfile = async (userId: string) => {
+		const { data, error } = await supabase
+			.from("profiles")
+			.select("*")
+			.eq("user_id", userId)
+			.single();
 
-			if (data.isAuthenticated) {
-				const newState = {
-					...authState,
-					user: data.user,
-					isAuthenticated: true,
-				};
-				setAuthState(newState);
-				return { isAuthenticated: true, user: data.userDetails };
-			} else {
-				logout();
-				return { isAuthenticated: false, user: null };
-			}
-		} catch (error) {
-			logout();
-			return { isAuthenticated: false, user: null };
+		if (error) {
+			console.error("Error fetching user role:", error.message);
+		} else {
+			return data;
 		}
 	};
 
+	const checkAuth = async () => {
+		const {
+			data: { user },
+		} = await supabase.auth.getUser();
+		const isAuthenticated = !!user;
+		setIsAuthenticated(isAuthenticated);
+		const profile = await fetchProfile(user!.id);
+		setUser(user);
+		setProfile(profile);
+		return { isAuthenticated, user };
+	};
+
 	useEffect(() => {
+		// Check initial auth state
 		checkAuth();
+
+		// Set up auth state listener
+		const {
+			data: { subscription },
+		} = supabase.auth.onAuthStateChange((_event, session) => {
+			setIsAuthenticated(!!session);
+			setUser(session?.user || null);
+		});
+
+		return () => {
+			subscription.unsubscribe();
+		};
 	}, []);
 
 	const logout = async () => {
-		await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
-		setAuthState({ isAuthenticated: false, user: null, token: null });
+		await supabase.auth.signOut();
+		setIsAuthenticated(false);
+		setUser(null);
 	};
 
 	return (
 		<AuthContext.Provider
 			value={{
-				isAuthenticated: authState.isAuthenticated,
-				user: authState.user,
+				isAuthenticated,
+				user,
+				profile,
 				checkAuth,
 				logout,
 			}}

@@ -21,6 +21,12 @@ import NotFound from "@/pages/NotFound";
 
 // Styles
 import "./App.css";
+import StudentsView from "./pages/StudentsView";
+import FacultiesView from "./pages/FacultiesView";
+import DepartmentsView from "./pages/DepartmentsView";
+import CoursesView from "./pages/CoursesView";
+import AttendanceView from "./pages/AttendanceView";
+import TimeTableView from "./pages/TimeTableView";
 
 function App() {
 	const location = useLocation();
@@ -47,6 +53,54 @@ function App() {
 							element={
 								<ProtectedRoute>
 									<DashboardHome />
+								</ProtectedRoute>
+							}
+						/>
+						<Route
+							path='students'
+							element={
+								<ProtectedRoute>
+									<StudentsView />
+								</ProtectedRoute>
+							}
+						/>
+						<Route
+							path='faculties'
+							element={
+								<ProtectedRoute>
+									<FacultiesView />
+								</ProtectedRoute>
+							}
+						/>
+						<Route
+							path='departments'
+							element={
+								<ProtectedRoute>
+									<DepartmentsView />
+								</ProtectedRoute>
+							}
+						/>
+						<Route
+							path='courses'
+							element={
+								<ProtectedRoute>
+									<CoursesView />
+								</ProtectedRoute>
+							}
+						/>
+						<Route
+							path='attendance'
+							element={
+								<ProtectedRoute>
+									<AttendanceView />
+								</ProtectedRoute>
+							}
+						/>
+						<Route
+							path='time-table'
+							element={
+								<ProtectedRoute>
+									<TimeTableView />
 								</ProtectedRoute>
 							}
 						/>
