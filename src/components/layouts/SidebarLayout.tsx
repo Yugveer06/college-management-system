@@ -299,11 +299,11 @@ function SidebarLayout() {
 										side='top'
 										className='w-[--radix-popper-anchor-width]'
 									>
-										<DropdownMenuItem asChild>
+										{/* <DropdownMenuItem asChild>
 											<Link to='/dashboard/profile'>
 												Profile
 											</Link>
-										</DropdownMenuItem>
+										</DropdownMenuItem> */}
 										<DropdownMenuItem onClick={logout}>
 											<span>Sign out</span>
 										</DropdownMenuItem>

@@ -24,10 +24,10 @@ const DashboardHome: React.FC = () => {
 		const fetchData = async () => {
 			try {
 				setStats({
-					students: 1,
-					faculties: 1,
-					departments: 1,
-					courses: 1,
+					students: 0,
+					faculties: 0,
+					departments: 0,
+					courses: 0,
 				});
 				setUserLoader(false);
 			} catch (error) {
