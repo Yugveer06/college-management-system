@@ -3,15 +3,15 @@ import { motion as m } from "motion/react";
 function AttendanceView() {
 	return (
 		<m.div
-			initial={{ opacity: 0, scale: 0.9 }}
+			initial={{ opacity: 0, x: -256 }}
 			animate={{
 				opacity: 1,
-				scale: 1,
+				x: 0,
 				transition: { ease: [0, 0.75, 0.25, 1] },
 			}}
 			exit={{
 				opacity: 0,
-				scale: 0.9,
+				x: 256,
 				transition: { ease: [0.75, 0, 1, 0.25] },
 			}}
 			className='flex-1 min-h-screen bg-neutral-100 dark:bg-neutral-950 p-6'

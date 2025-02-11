@@ -1,6 +1,5 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
-import { UserRole } from "@/types/auth";
 import {
 	BookCopy,
 	BookUser,
@@ -15,7 +14,7 @@ import {
 	Users,
 } from "lucide-react";
 import { motion as m } from "motion/react";
-import { JSX } from "react";
+import React, { JSX } from "react";
 import { Link, Outlet, useLocation } from "react-router";
 import {
 	Collapsible,
@@ -46,6 +45,7 @@ import {
 	SidebarProvider,
 	useSidebar,
 } from "../ui/sidebar";
+import { UserRole } from "@/types/auth";
 
 function SidebarLayout() {
 	const { profile, logout } = useAuth();
@@ -54,7 +54,7 @@ function SidebarLayout() {
 	return (
 		<>
 			<SidebarProvider className='w-screen bg-gray-100'>
-				<Sidebar>
+				<Sidebar variant='floating'>
 					<SidebarHeader>
 						<SidebarMenu>
 							<SidebarMenuItem>
@@ -423,22 +423,14 @@ const groups: Group[] = [
 				title: "Attendance",
 				href: "/dashboard/attendance",
 				icon: <ListCheck />,
-				allowedRoles: [
-					UserRole.ADMIN,
-					UserRole.MANAGER,
-					UserRole.PHARMACIST,
-				],
+				allowedRoles: ["admin"],
 			},
 			{
 				id: "timeTable",
 				title: "Time Table",
 				href: "/dashboard/time-table",
 				icon: <CalendarDays />,
-				allowedRoles: [
-					UserRole.ADMIN,
-					UserRole.MANAGER,
-					UserRole.PHARMACIST,
-				],
+				allowedRoles: ["admin"],
 			},
 		],
 	},

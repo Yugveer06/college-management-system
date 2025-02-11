@@ -9,7 +9,7 @@ import { User } from "@supabase/supabase-js";
 import { supabase } from "@/hooks/useSupabase";
 
 interface AuthContextType {
-	isAuthenticated: boolean;
+	isAuthenticated: boolean | null;
 	user: User | null;
 	profile: any | null;
 	checkAuth: () => Promise<{ isAuthenticated: boolean; user: User | null }>;
@@ -19,7 +19,9 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+	const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(
+		null
+	);
 	const [user, setUser] = useState<User | null>(null);
 	const [profile, setProfile] = useState<any | null>(null);
 
@@ -27,7 +29,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		const { data, error } = await supabase
 			.from("profiles")
 			.select("*")
-			.eq("user_id", userId)
+			.eq("id", userId)
 			.single();
 
 		if (error) {

@@ -11,6 +11,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "./dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 
 type ImageViewerContextType = {
 	isOpen: boolean;
@@ -18,7 +19,9 @@ type ImageViewerContextType = {
 	imageSrc: string;
 };
 
-const ImageViewerContext = React.createContext<ImageViewerContextType | undefined>(undefined);
+const ImageViewerContext = React.createContext<
+	ImageViewerContextType | undefined
+>(undefined);
 
 const useImageViewer = () => {
 	const context = React.useContext(ImageViewerContext);
@@ -45,28 +48,47 @@ const ImageViewer = ({ children, imageSrc }: ImageViewerProps) => {
 	);
 };
 
-const ImageViewerTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
-	({ className, children, ...props }, ref) => {
-		return (
-			<DialogTrigger asChild>
-				<button ref={ref} className={cn("inline-flex items-center justify-center", className)} {...props}>
-					{children}
-				</button>
-			</DialogTrigger>
-		);
-	}
-);
+const ImageViewerTrigger = React.forwardRef<
+	HTMLButtonElement,
+	React.ButtonHTMLAttributes<HTMLButtonElement>
+>(({ className, children, ...props }, ref) => {
+	return (
+		<DialogTrigger asChild>
+			<button
+				ref={ref}
+				className={cn(
+					"inline-flex items-center justify-center",
+					className
+				)}
+				{...props}
+			>
+				{children}
+			</button>
+		</DialogTrigger>
+	);
+});
 ImageViewerTrigger.displayName = "ImageViewerTrigger";
 
-const ImageViewerContent = ({ title, description }: { title: string; description: string }) => {
+const ImageViewerContent = ({
+	title,
+	description,
+}: {
+	title: string;
+	description: string;
+}) => {
 	const { imageSrc } = useImageViewer();
 
 	return (
-		<DialogContent showClose={false} className='!gap-0 p-0 bg-transparent outline-none shadow-none border-none'>
+		<DialogContent
+			showClose={false}
+			className='!gap-0 p-0 bg-transparent outline-none shadow-none border-none'
+		>
 			<DialogHeader className='flex items-center justify-between flex-row bg-white p-4 rounded-t-xl'>
 				<div className='flex flex-col gap-1'>
 					<DialogTitle>{title}</DialogTitle>
-					<DialogDescription className='text-xs'>{description}</DialogDescription>
+					<DialogDescription className='text-xs'>
+						{description}
+					</DialogDescription>
 				</div>
 				<DialogClose>
 					<X size={20} />
@@ -74,7 +96,17 @@ const ImageViewerContent = ({ title, description }: { title: string; description
 			</DialogHeader>
 			<div className='relative p-0'>
 				<div className='overflow-auto p-1 bg-white rounded-b-2xl'>
-					<img src={imageSrc} alt='Preview' className='object-contain rounded-xl' />
+					<Avatar>
+						<AvatarImage
+							src={imageSrc}
+							alt={"Profile Picture"}
+							className='w-full object-contain rounded-xl'
+						/>
+						<AvatarFallback className='bg-neutral-100 border border-neutral-300'>
+							{description.split(" ")[0].split("")[0]}
+							{description.split(" ")[1].split("")[0]}
+						</AvatarFallback>
+					</Avatar>
 				</div>
 			</div>
 		</DialogContent>
@@ -84,7 +116,13 @@ const ImageViewerContent = ({ title, description }: { title: string; description
 const ImageViewerOverlay = React.forwardRef<
 	React.ElementRef<typeof DialogOverlay>,
 	React.ComponentPropsWithoutRef<typeof DialogOverlay>
->(({ className, ...props }, ref) => <DialogOverlay ref={ref} className={cn("bg-black/80", className)} {...props} />);
+>(({ className, ...props }, ref) => (
+	<DialogOverlay
+		ref={ref}
+		className={cn("bg-black/80", className)}
+		{...props}
+	/>
+));
 ImageViewerOverlay.displayName = "ImageViewerOverlay";
 
 ImageViewer.Trigger = ImageViewerTrigger;

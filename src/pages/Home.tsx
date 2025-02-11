@@ -9,26 +9,27 @@ import { useAuth } from "@/contexts/AuthContext";
 const services = [
 	{
 		emoji: "📦",
-		title: "Inventory Management",
+		title: "Student Management",
 		description:
-			"Track medicines, check stock levels, and get alerts for low inventory.",
+			"Efficiently manage student records, including admissions, attendance, and academic performance.",
 	},
 	{
 		emoji: "🗂️",
-		title: "Customer Records",
+		title: "Faculty & Staff Records",
 		description:
-			"Maintain detailed records of customer purchases and prescriptions.",
+			"Maintain detailed records of faculty and staff, including roles, schedules, and payroll.",
 	},
 	{
 		emoji: "🔒",
-		title: "Secure Transactions",
-		description: "Ensure secure and seamless financial transactions.",
+		title: "Course & Enrollment Management",
+		description:
+			"Easily handle course creation, student enrollments, and class schedules.",
 	},
 	{
 		emoji: "📊",
 		title: "Reports and Analytics",
 		description:
-			"Generate insightful reports to track sales and inventory trends.",
+			"Generate insightful reports on student performance, faculty efficiency, and academic trends.",
 	},
 ];
 
@@ -75,7 +76,7 @@ function Home() {
 							College Management System
 						</m.h1>
 						<p className='mt-4 text-base sm:text-lg md:text-xl text-white'>
-							Simplifying Medication Management for Better Health
+							Simplifying Academic Management for Better Education
 						</p>
 					</div>
 					<div className='flex items-center justify-center gap-4'>
@@ -111,9 +112,8 @@ function Home() {
 							</h3>
 							<p className='text-gray-700'>
 								A comprehensive solution designed to streamline
-								pharmacy operations, ensuring seamless
-								experiences for pharmacists, store owners, and
-								customers.
+								college administration, ensuring seamless
+								experiences for students, faculty, and staff.
 							</p>
 						</div>
 						<div className='bg-white p-6 rounded-lg shadow-md'>
@@ -121,9 +121,9 @@ function Home() {
 								Our Mission
 							</h3>
 							<p className='text-gray-700'>
-								To empower pharmacies with modern technology,
-								improve operational efficiency, and deliver
-								excellent service to customers.
+								To empower educational institutions with modern
+								technology, improve operational efficiency, and
+								enhance the academic experience.
 							</p>
 						</div>
 						<div className='bg-white p-6 rounded-lg shadow-md'>
@@ -132,8 +132,8 @@ function Home() {
 							</h3>
 							<p className='text-gray-700'>
 								We provide reliable and efficient systems that
-								simplify inventory management and enhance
-								business operations.
+								simplify student records, faculty management,
+								and academic operations.
 							</p>
 						</div>
 					</div>
@@ -180,9 +180,9 @@ function Home() {
 								About CMS
 							</h3>
 							<p className='text-gray-400 text-sm'>
-								Your trusted partner in pharmacy management
-								solutions, making medication tracking and
-								inventory management easier.
+								Your trusted partner in academic management
+								solutions, making student tracking and resource
+								management easier.
 							</p>
 						</div>
 						<div>
